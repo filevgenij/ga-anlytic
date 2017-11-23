@@ -1,0 +1,8 @@
+.idea/
+
+# Byte-compiled / optimized / DLL files
+*.py[cod]
+
+#deployment files
+.env
+yoyo.ini
