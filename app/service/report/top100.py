@@ -68,6 +68,7 @@ class Top100(object):
             data.append([
                 user_id,
                 users_info.get(user_id).get('email'),
+                '{} {}'.format(users_info.get(user_id).get('firstName'), users_info.get(user_id).get('lastName')),
                 users_info.get(user_id).get('country'),
                 users_info.get(user_id).get('industry'),
                 users_info.get(user_id).get('website'),
@@ -111,17 +112,16 @@ class Top100(object):
                         s.createdAt BETWEEN %s AND %s
                         AND l.lang != '(not set)'
                         AND s.actionWay != 'search_by_address'
-                        %s
+                        AND l.lang LIKE %s
                     GROUP BY
                         u.id
                     ORDER BY
                         unique_scenes DESC
                     LIMIT 100
                 """
-                lang_condition = "AND l.lang LIKE '{}%".format(language) if language != 'all' else ""
                 cursor.execute(sql, ['{} 00:00:00'.format(period[0]),
                                      '{} 23:59:59'.format(period[1]),
-                                     lang_condition])
+                                     language + '%' if language != 'all' else "%"])
                 return dict((row['user_id'], row) for row in cursor.fetchall())
         except Exception as e:
             print(str(e))

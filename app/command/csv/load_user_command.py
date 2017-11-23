@@ -31,7 +31,9 @@ class LoadUserCommand(BaseCommand):
                 row['industry'],
                 row['website'],
                 ', '.join(social),
-                datetime.strptime(row['date_joined'], '%Y-%m-%d %H:%M:%S').date().strftime('%Y-%m-%d')
+                datetime.strptime(row['date_joined'], '%Y-%m-%d %H:%M:%S').date().strftime('%Y-%m-%d'),
+                row['first_name'],
+                row['last_name']
             ])
             progress.advance()
 

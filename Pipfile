@@ -9,9 +9,10 @@ name = "pypi"
 
 requests = "*"
 google-api-python-client = "*"
-PyMySQL = "*"
+pymysql = "*"
 cleo = "*"
 yoyo-migrations = "*"
+mysqlclient = "*"
 
 
 [dev-packages]

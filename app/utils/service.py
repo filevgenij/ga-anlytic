@@ -5,6 +5,7 @@ from pymysql import cursors, connect
 from app.service.band import Band
 from app.service.collector import Collector
 from app.service.dowload import Download
+from app.service.finder.user import User as UserFinder
 from app.service.google_analytic import GoogleAnalytic
 from app.service.language import Language
 from app.service.payment import Payment
@@ -12,6 +13,7 @@ from app.service.referrer import Referrer
 from app.service.report.paid_activity import PaidActivity
 from app.service.report.registration_way import RegistrationWay
 from app.service.report.top100 import Top100
+from app.service.report.user_info import UserInfo
 from app.service.scene import Scene
 from app.service.session import Session
 from app.service.user import User
@@ -89,3 +91,13 @@ container['paid_activity'] = lambda c: PaidActivity(c['payment_service'], c['use
                                                     c['scene_service'], c['band_service'],
                                                     c['download_service'])
 container.share('paid_activity')
+
+container['user_info'] = lambda c: UserInfo(c['user_service'], c['payment_service'],
+                                            c['session_service'])
+container.share('user_info')
+
+# finder services
+container['user_finder'] = lambda c: UserFinder(c['db'])
+container.share('user_finder')
+
+

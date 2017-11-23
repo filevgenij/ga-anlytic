@@ -9,8 +9,8 @@ class User(object):
         try:
             with self._db.cursor() as cursor:
                 sql = """
-                    INSERT IGNORE INTO user (id, email, country, industry, website, social, createdAt)
-                    VALUES(%s, %s, %s, %s, %s, %s, %s)
+                    INSERT IGNORE INTO user (id, email, country, industry, website, social, createdAt, fullName, lastName)
+                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """
                 cursor._defer_warnings = True
                 cursor.execute(sql, row)
@@ -66,4 +66,21 @@ class User(object):
         except Exception as e:
             print(str(e))
 
+    def update_fullname(self, user_id, first_name, last_name):
+        """
+        Update email full_name, last_name.
 
+        :param user_id: User Id
+        :type user_id: int
+        :param first_name: first name
+        :type first_name: basestring
+        :param last_name: last name
+        :type last_name: basestring
+        """
+        try:
+            with self._db.cursor() as cursor:
+                sql = "UPDATE user SET firstName = %s, lastName = %s WHERE id = %s"
+                cursor.execute(sql, [first_name, last_name, user_id])
+            self._db.commit()
+        except Exception as e:
+            print(str(e))
