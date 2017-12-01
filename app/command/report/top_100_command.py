@@ -7,18 +7,19 @@ class Top100Command(BaseCommand):
     Calculate top 100 user statistic
 
     report:top_100
-        {--path= : Path to result csv file. }
+        {--path=: Path to result csv file. }
         {--period=* : Report period. For example "--period 2017-01-01 --period 2017-02-01"}
         {--lang-filter=: Filter by language. For example "en"}
+        {--only-paid-search=False: Calculate only for paid users}
     """
-
     def handle(self):
 
         top100 = self.get_container()['top100']
 
         period = self.option('period')
         lang = self.option('lang-filter')
-        report_data = top100.get_report(period, lang)
+        only_paid_search = self.option('only-paid-search')
+        report_data = top100.get_report(period, lang, only_paid_search)
 
         header = [
             'User ID', 'Email', 'Full Name', 'Country', 'Industry', 'Website',

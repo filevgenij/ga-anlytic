@@ -9,11 +9,14 @@ from app.service.finder.user import User as UserFinder
 from app.service.google_analytic import GoogleAnalytic
 from app.service.language import Language
 from app.service.payment import Payment
+from app.service.payment_track import PaymentTrack
 from app.service.referrer import Referrer
 from app.service.report.paid_activity import PaidActivity
 from app.service.report.registration_way import RegistrationWay
+from app.service.report.retention import Retention
 from app.service.report.top100 import Top100
 from app.service.report.user_info import UserInfo
+from app.service.report.scene import Scene as SceneReport
 from app.service.scene import Scene
 from app.service.session import Session
 from app.service.user import User
@@ -57,6 +60,9 @@ container.share('user_service')
 container['payment_service'] = lambda c: Payment(c['db'])
 container.share('payment_service')
 
+container['payment_track_service'] = lambda c: PaymentTrack(c['db'])
+container.share('payment_track_service')
+
 container['scene_service'] = lambda c: Scene(c['db'])
 container.share('scene_service')
 
@@ -74,7 +80,7 @@ container.share('session_service')
 
 container['collector'] = lambda c: Collector(c['ga'], c['session_service'], c['scene_service'],
                                              c['band_service'], c['download_service'],
-                                             c['referrer_service'], c['language_service'])
+                                             c['referrer_service'], c['language_service'], c['user_service'])
 container.share('collector')
 
 
@@ -95,6 +101,12 @@ container.share('paid_activity')
 container['user_info'] = lambda c: UserInfo(c['user_service'], c['payment_service'],
                                             c['session_service'])
 container.share('user_info')
+
+container['retention'] = lambda c: Retention(c['db'])
+container.share('retention')
+
+container['scenes_report'] = lambda c: SceneReport(c['db'])
+container.share('scenes_report')
 
 # finder services
 container['user_finder'] = lambda c: UserFinder(c['db'])

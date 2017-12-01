@@ -9,7 +9,7 @@ class User(object):
         try:
             with self._db.cursor() as cursor:
                 sql = """
-                    INSERT IGNORE INTO user (id, email, country, industry, website, social, createdAt, fullName, lastName)
+                    INSERT IGNORE INTO user (id, email, country, industry, website, social, createdAt, firstName, lastName)
                     VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """
                 cursor._defer_warnings = True
@@ -84,3 +84,21 @@ class User(object):
             self._db.commit()
         except Exception as e:
             print(str(e))
+
+    def update_traffic_source(self, user_id, traffic_source):
+        """
+        Update user traffic source
+
+        :param user_id: User Id
+        :type user_id: int
+        :param traffic_source: Traffic source
+        :type traffic_source: basestring
+        """
+        try:
+            with self._db.cursor() as cursor:
+                sql = "UPDATE user SET trafficSource = %s WHERE id = %s"
+                cursor.execute(sql, [traffic_source, user_id])
+            self._db.commit()
+        except Exception as e:
+            print(str(e))
+

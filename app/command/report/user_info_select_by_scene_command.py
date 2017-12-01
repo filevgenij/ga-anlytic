@@ -4,14 +4,13 @@ from app.utils.hepler.csv import CsvWriter
 
 class UserInfoSelectBySceneCommand(BaseCommand):
     """
-    Calculate top 100 user statistic
+    Get user information. Select users by scene count and period.
 
     report:user_info_selected_by_scene
         {--path= : Path to result csv file. }
         {--scene-count=: Amount of scene in period}
         {--period=* : Report period. For example "--period 2017-01-01 --period 2017-02-01"}
     """
-
     def handle(self):
 
         period = self.option('period')

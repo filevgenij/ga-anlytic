@@ -43,7 +43,7 @@ class Top100(object):
         self._session_service = session_service
         self._db = db
 
-    def get_report(self, period, language):
+    def get_report(self, period, language, only_paid_search):
         """
         Return report data according input params
 
@@ -51,10 +51,13 @@ class Top100(object):
         :type period: list
         :param language: Language for filtering report data. "all" value will disable filtering
         :type language: basestring
+        :param only_paid_search: Calculate only paid users
+        :type only_paid_search: bool
+
         :return: List of report data
         :rtype: list
         """
-        top100 = self._get_top100_user_ids(period, language)
+        top100 = self._get_top100_user_ids(period, language, only_paid_search)
         user_ids = list(top100.keys())
 
         users_info = self._user_service.get_users(user_ids)
@@ -85,7 +88,7 @@ class Top100(object):
             ])
         return data
 
-    def _get_top100_user_ids(self, period, language):
+    def _get_top100_user_ids(self, period, language, only_paid_search=False):
         """
         Return top 100 user_ids, their languages and amount of unique scenes
 
@@ -93,6 +96,8 @@ class Top100(object):
         :type period: list
         :param language: Language for filtering report data. "all" value will disable filtering
         :type language: str
+        :param only_paid_search: Calculate only paid users
+        :type only_paid_search: bool
 
         :return: Dictionary like dict(user_id => user_data_dictionary,...)
         :rtype: dict
@@ -113,6 +118,11 @@ class Top100(object):
                         AND l.lang != '(not set)'
                         AND s.actionWay != 'search_by_address'
                         AND l.lang LIKE %s
+                """
+                if only_paid_search:
+                    sql += " AND u.trafficSource = 'Paid Search' "
+
+                sql += """
                     GROUP BY
                         u.id
                     ORDER BY
