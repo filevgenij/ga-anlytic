@@ -18,7 +18,7 @@ class Top100Command(BaseCommand):
 
         period = self.option('period')
         lang = self.option('lang-filter')
-        only_paid_search = self.option('only-paid-search')
+        only_paid_search = (self.option('only-paid-search') == 'True')
         report_data = top100.get_report(period, lang, only_paid_search)
 
         header = [

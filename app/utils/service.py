@@ -11,7 +11,9 @@ from app.service.language import Language
 from app.service.payment import Payment
 from app.service.payment_track import PaymentTrack
 from app.service.referrer import Referrer
+from app.service.referrer_url import ReferrerUrl
 from app.service.report.paid_activity import PaidActivity
+from app.service.report.payment_page import PaymentPage
 from app.service.report.registration_way import RegistrationWay
 from app.service.report.retention import Retention
 from app.service.report.top100 import Top100
@@ -83,6 +85,9 @@ container['collector'] = lambda c: Collector(c['ga'], c['session_service'], c['s
                                              c['referrer_service'], c['language_service'], c['user_service'])
 container.share('collector')
 
+container['referrer_url_service'] = lambda c: ReferrerUrl(c['db'])
+container.share('referrer_url_service')
+
 
 # report services
 container['top100'] = lambda c: Top100(c['db'], c['user_service'], c['payment_service'],
@@ -99,7 +104,8 @@ container['paid_activity'] = lambda c: PaidActivity(c['payment_service'], c['use
 container.share('paid_activity')
 
 container['user_info'] = lambda c: UserInfo(c['user_service'], c['payment_service'],
-                                            c['session_service'])
+                                            c['session_service'], c['scene_service'],
+                                            c['band_service'], c['download_service'])
 container.share('user_info')
 
 container['retention'] = lambda c: Retention(c['db'])
@@ -107,6 +113,9 @@ container.share('retention')
 
 container['scenes_report'] = lambda c: SceneReport(c['db'])
 container.share('scenes_report')
+
+container['payment_page'] = lambda c: PaymentPage(c['db'])
+container.share('payment_page')
 
 # finder services
 container['user_finder'] = lambda c: UserFinder(c['db'])

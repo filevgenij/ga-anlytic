@@ -27,7 +27,10 @@ class LoadPaymentsCommand(BaseCommand):
 
 # Query for build csv file
 # SELECT
-#     ip,
-#     s.user_id
+#     s.user_id as user_id,
+#     DATE(t.date_create) as date,
+#     t.type as type
 # FROM
-#     tracking_registration
+#     billing_transaction as t
+#     INNER JOIN billing_subscription as s ON (t.subscription_id = s.id)
+# order by 2;

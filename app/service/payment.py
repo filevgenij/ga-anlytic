@@ -8,7 +8,7 @@ class Payment(object):
     def insert(self, row):
         try:
             with self._db.cursor() as cursor:
-                sql = """INSERT IGNORE INTO payments (userId, paymentDate, typeOfPayment) VALUES(%s, %s, %s)"""
+                sql = """INSERT IGNORE INTO payment (userId, paymentDate, typeOfPayment) VALUES(%s, %s, %s)"""
                 cursor._defer_warnings = True
                 cursor.execute(sql, row)
             self._db.commit()

@@ -8,7 +8,10 @@ class UserInfo(object):
     def __init__(self,
                  user_service,
                  payment_service,
-                 session_service):
+                 session_service,
+                 scene_service,
+                 band_service,
+                 download_service):
         """
         Constructor
 
@@ -22,6 +25,9 @@ class UserInfo(object):
         self._user_service = user_service
         self._payment_service = payment_service
         self._session_service = session_service
+        self._scene_service = scene_service
+        self._band_service = band_service
+        self._download_service = download_service
 
     def get_report(self, user_ids, period):
         """
@@ -37,6 +43,9 @@ class UserInfo(object):
 
         users_info = self._user_service.get_users(user_ids)
         first_payments = self._payment_service.get_first_payments()
+        total_scenes = self._scene_service.total_scenes_by_period(user_ids, period)
+        total_bands = self._band_service.total_bands_by_period(user_ids, period)
+        total_downloads = self._download_service.total_downloads_by_period(user_ids, period)
         days_with_login = self._session_service.get_days_with_login(user_ids, period)
 
         data = []
@@ -51,6 +60,9 @@ class UserInfo(object):
                 ', '.join([i for i in users_info.get(user_id).get('social').split(',') if i]),
                 users_info.get(user_id).get('createdAt').strftime('%Y-%m-%d'),
                 first_payments.get(user_id).strftime('%Y-%m-%d') if user_id in first_payments else '',
+                total_scenes.get(user_id),
+                total_bands.get(user_id),
+                total_downloads.get(user_id),
                 (datetime.now().date() - users_info.get(user_id).get('createdAt')).days,
                 days_with_login.get(user_id).get('days_with_login'),
                 days_with_login.get(user_id).get('days_in_period')

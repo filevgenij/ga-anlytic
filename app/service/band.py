@@ -67,8 +67,9 @@ class Band(object):
                 """
                 in_p = ', '.join(list(map(lambda x: '%s', user_ids)))
                 sql = sql.format(in_p)
-                cursor.execute(sql,
-                               user_ids + ['{} 00:00:00'.format(period[0]), '{} 23:59:59'.format(period[1])])
+                cursor.execute(sql, user_ids + [
+                    '{} 00:00:00'.format(period[0]),
+                    '{} 23:59:59'.format(period[1])])
                 return dict((row['userId'], row['cnt_bands']) for row in cursor.fetchall())
         except Exception as e:
             print(str(e))

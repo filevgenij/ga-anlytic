@@ -25,7 +25,7 @@ class Session(object):
                     SELECT
                       userId,
                       COUNT(*) AS days_with_login,
-                      SUM(IF(createdAt BETWEEN %s AND %s, 1, 0)) AS days_in_period
+                      SUM(IF(MONTH(createdAt) = %s, 1, 0)) AS days_in_period
                     FROM
                       session
                     WHERE
@@ -35,8 +35,11 @@ class Session(object):
                 """
                 in_p = ', '.join(list(map(lambda x: '%s', user_ids)))
                 sql = sql.format(in_p)
-                cursor.execute(sql,
-                               ['{} 00:00:00'.format(period[0]), '{} 23:59:59'.format(period[1])] + user_ids)
+                cursor.execute(sql, [
+                    int(period[1][5:7])
+                    # '{} 00:00:00'.format(period[0]),
+                    # '{} 23:59:59'.format(period[1])
+                ] + user_ids)
                 return dict((row['userId'], row) for row in cursor.fetchall())
         except Exception as e:
             print(str(e))

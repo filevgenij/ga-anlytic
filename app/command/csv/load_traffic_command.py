@@ -26,3 +26,14 @@ class LoadTrafficCommand(BaseCommand):
 
         progress.finish()
         self.line("\nDone!")
+
+
+# SELECT
+#     r.user_id,
+#     v.url
+# FROM
+#     tracking_registration as r
+#     INNER JOIN tracking_visiturl as v on (r.last_visit_url_id = v.id)
+# WHERE
+#     v.utm_source = 'google_as' AND
+#     r.last_visit_date > '2017-11-01 00:00:00'

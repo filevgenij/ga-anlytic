@@ -51,3 +51,27 @@ class Scene(object):
         except Exception as e:
             print(str(e))
 
+    def total_scenes_by_period(self, user_ids, period):
+        try:
+            with self._db.cursor() as cursor:
+                sql = """
+                    SELECT
+                      userId,
+                      COUNT(DISTINCT createdAt, name) AS cnt_scenes
+                    FROM
+                      scene
+                    WHERE
+                      userId IN ({})
+                      AND createdAt BETWEEN %s AND %s
+                    GROUP BY
+                      userId
+                """
+                in_p = ', '.join(list(map(lambda x: '%s', user_ids)))
+                sql = sql.format(in_p)
+                cursor.execute(sql, user_ids + [
+                    '{} 00:00:00'.format(period[0]),
+                    '{} 23:59:59'.format(period[1])])
+                return dict((row['userId'], row['cnt_scenes']) for row in cursor.fetchall())
+        except Exception as e:
+            print(str(e))
+

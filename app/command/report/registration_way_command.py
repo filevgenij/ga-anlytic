@@ -18,7 +18,7 @@ class RegistrationWayCommand(BaseCommand):
         group_by = self.option('group-by')
         period = self.option('period')
         if group_by == 'month':
-            report_data = registration_way.get_report(period)
+            report_data = registration_way.get_report_by_month(period)
             first_column_name = 'Month'
         elif group_by == 'week':
             report_data = registration_way.get_report_by_week(period)
